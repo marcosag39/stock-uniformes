@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stock de Uniformes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 20px;
+      background: #f2f4f7;
+    }
+    main {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+    }
+    input, button {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 12px;
+      margin: 6px 0;
+    }
+    button {
+      background: #155eef;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Stock de Uniformes</h1>
+    <p>Inventario de prendas por talle.</p>
+
+    <label for="prenda">Prenda</label>
+    <input id="prenda" placeholder="Ej.: Remera">
+
+    <label for="talle">Talle</label>
+    <input id="talle" placeholder="Ej.: M">
+
+    <label for="cantidad">Cantidad</label>
+    <input id="cantidad" type="number" min="0" value="1">
+
+    <button onclick="alert('La pantalla inicial funciona. El próximo paso es conectar Supabase.')">
+      Probar aplicación
+    </button>
+  </main>
+</body>
+</html>
