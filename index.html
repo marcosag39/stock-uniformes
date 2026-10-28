@@ -1,54 +1,79 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173b2c">
+  <meta name="description" content="Inventario de prendas de uniformes">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
   <title>Stock de Uniformes</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 600px;
-      margin: 30px auto;
-      padding: 20px;
-      background: #f2f4f7;
-    }
-    main {
-      background: white;
-      padding: 24px;
-      border-radius: 12px;
-    }
-    input, button {
-      box-sizing: border-box;
-      width: 100%;
-      padding: 12px;
-      margin: 6px 0;
-    }
-    button {
-      background: #155eef;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-  </style>
 </head>
 <body>
+  <header class="topbar">
+    <div class="brand"><span class="logo">SU</span><div><h1>Stock de Uniformes</h1><p>Control de inventario</p></div></div>
+    <button id="logoutBtn" class="secondary hidden">Cerrar sesión</button>
+  </header>
+
   <main>
-    <h1>Stock de Uniformes</h1>
-    <p>Inventario de prendas por talle.</p>
+    <section id="setupNotice" class="notice hidden">
+      <strong>Falta configurar Supabase</strong>
+      <p>Antes de iniciar sesión, abrí <code>app.js</code> y completá <code>SUPABASE_URL</code> y <code>SUPABASE_ANON_KEY</code> con los datos de tu proyecto Supabase. Seguí las instrucciones de README.md.</p>
+    </section>
 
-    <label for="prenda">Prenda</label>
-    <input id="prenda" placeholder="Ej.: Remera">
+    <section id="authView" class="auth-card">
+      <div class="eyebrow">TU INVENTARIO, EN UN SOLO LUGAR</div>
+      <h2>Ingresar</h2>
+      <p class="muted">Entrá con tu cuenta para consultar y editar el stock.</p>
+      <form id="loginForm">
+        <label for="email">Correo electrónico</label>
+        <input id="email" type="email" autocomplete="username" placeholder="vos@ejemplo.com" required>
+        <label for="password">Contraseña</label>
+        <input id="password" type="password" autocomplete="current-password" placeholder="Tu contraseña" required minlength="6">
+        <button type="submit" class="primary full">Iniciar sesión</button>
+      </form>
+      <p class="muted small">¿Primera vez? Creá tu cuenta con el botón de abajo. Según la configuración de Supabase, puede ser necesario confirmar el correo.</p>
+      <button id="signupBtn" class="secondary full">Crear cuenta nueva</button>
+      <p id="authMessage" class="message" role="status"></p>
+    </section>
 
-    <label for="talle">Talle</label>
-    <input id="talle" placeholder="Ej.: M">
-
-    <label for="cantidad">Cantidad</label>
-    <input id="cantidad" type="number" min="0" value="1">
-
-    <button onclick="alert('La pantalla inicial funciona. El próximo paso es conectar Supabase.')">
-      Probar aplicación
-    </button>
+    <section id="appView" class="hidden">
+      <div class="welcome-row">
+        <div><div class="eyebrow">RESUMEN GENERAL</div><h2>Tu inventario</h2></div>
+        <button id="addBtn" class="primary">＋ Agregar prenda</button>
+      </div>
+      <div class="stats">
+        <article class="stat"><span>Registros</span><strong id="recordCount">0</strong></article>
+        <article class="stat"><span>Unidades totales</span><strong id="unitCount">0</strong></article>
+      </div>
+      <div class="toolbar">
+        <input id="searchInput" type="search" placeholder="Buscar por prenda o talle…" aria-label="Buscar por prenda o talle">
+        <button id="refreshBtn" class="secondary">Actualizar</button>
+      </div>
+      <div id="loading" class="muted">Cargando inventario…</div>
+      <div id="emptyState" class="empty hidden"><div class="empty-icon">▤</div><h3>Tu inventario está vacío</h3><p>Agregá tu primera prenda para empezar.</p><button id="emptyAddBtn" class="primary">Agregar primera prenda</button></div>
+      <div id="inventory" class="inventory"></div>
+      <p id="appMessage" class="message" role="status"></p>
+    </section>
   </main>
+
+  <dialog id="itemDialog">
+    <form id="itemForm" method="dialog">
+      <div class="dialog-head"><div><div class="eyebrow">INVENTARIO</div><h2 id="dialogTitle">Agregar prenda</h2></div><button type="button" id="closeDialog" class="icon-btn" aria-label="Cerrar">✕</button></div>
+      <input id="itemId" type="hidden">
+      <label for="garment">Nombre de la prenda</label>
+      <input id="garment" type="text" maxlength="100" placeholder="Ej.: Chomba" required>
+      <label for="size">Talle</label>
+      <input id="size" type="text" maxlength="30" placeholder="Ej.: M,  talle 40, 6" required>
+      <label for="quantity">Cantidad</label>
+      <input id="quantity" type="number" min="0" step="1" value="0" required>
+      <p id="formMessage" class="message" role="status"></p>
+      <div class="dialog-actions"><button type="button" id="cancelBtn" class="secondary">Cancelar</button><button type="submit" id="saveBtn" class="primary">Guardar</button></div>
+    </form>
+  </dialog>
+  <footer>Stock de Uniformes · Los datos se guardan en tu cuenta online.</footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js"></script>
 </body>
 </html>
